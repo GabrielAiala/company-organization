@@ -30,6 +30,7 @@ gem "bootsnap", require: false
 # gem "rack-cors"
 
 group :development, :test do
+  gem 'rspec-rails', '~> 7.0.0'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -42,4 +43,4 @@ end
 
 
 
-gem "rails-graphql", "~> 1.0"
+gem "graphql", "~> 2.3"
