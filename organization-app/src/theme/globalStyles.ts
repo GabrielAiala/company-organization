@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: ${(props) => props.theme.fonts.main};
-    background-color: ${(props) => props.theme.colors.base};
+    background-color: ${(props) => props.theme.colors.neutral["98"]};
     color: ${(props) => props.theme.colors.text};
     line-height: 1.6;
   }

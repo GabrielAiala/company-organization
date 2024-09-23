@@ -6,6 +6,9 @@ import StyledComponentsRegistry from '../lib/registry';
 import GlobalStyle from '../theme/globalStyles';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '@/theme/lightTheme';
+import ApolloProviderWrapper from '@/lib/apolloWraper';
+
+//TODO trocar a font
 
 export default function RootLayout({
   children,
@@ -16,9 +19,10 @@ export default function RootLayout({
     <html>
       <body>
         <ThemeProvider theme={lightTheme}>
-
-          <GlobalStyle />
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          <ApolloProviderWrapper>
+            <GlobalStyle />
+            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          </ApolloProviderWrapper>
         </ThemeProvider>
       </body>
     </html>
