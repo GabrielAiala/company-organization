@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+//TODO reorganize components
+
 const MainBody = styled.div`
   width: 100vw;
   display: flex;

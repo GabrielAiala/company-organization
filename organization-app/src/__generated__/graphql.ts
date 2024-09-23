@@ -70,10 +70,18 @@ export type QueryCompanyArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type CompanyCreateMutationVariables = Exact<{
+  company: CompanyInput;
+}>;
+
+
+export type CompanyCreateMutation = { __typename?: 'Mutation', companyCreate?: { __typename?: 'CompanyCreatePayload', clientMutationId?: string | null, company: { __typename?: 'Company', createdAt: any, id: string, name?: string | null, updatedAt: any } } | null };
+
 export type CompaniesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CompaniesQuery = { __typename?: 'Query', companies?: Array<{ __typename?: 'Company', id: string, name?: string | null }> | null };
 
 
+export const CompanyCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CompanyCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"company"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CompanyInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"companyCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"companyInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"company"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}},{"kind":"Field","name":{"kind":"Name","value":"company"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<CompanyCreateMutation, CompanyCreateMutationVariables>;
 export const CompaniesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Companies"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"companies"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CompaniesQuery, CompaniesQueryVariables>;

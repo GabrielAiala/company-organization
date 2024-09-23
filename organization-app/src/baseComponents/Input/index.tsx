@@ -1,8 +1,12 @@
 import React from 'react';
 import { Field } from './styles';
 
-export default function Input() {
+interface props {
+  name: string,
+}
+
+export default function Input({name}: props) {
   return (
-    <Field type="text"/>
+    <Field name={name} type="text"/>
   )
 }
