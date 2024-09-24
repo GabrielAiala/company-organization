@@ -15,7 +15,7 @@ import {
   Button,
 } from "./styles";
 
-const GET_USERS = gql(`
+const GET_COMPANIES = gql(`
   query Companies {
     companies {
       id
@@ -28,12 +28,19 @@ const GET_USERS = gql(`
 export default function Home() {
   const router = useRouter();
 
-  const { loading, error, data } = useQuery(GET_USERS);
+  const { loading, error, data } = useQuery(GET_COMPANIES);
 
 
   const handleClickAdd = () => {
     router.push('/company/new')
   }
+
+  // fazer a navegação passando parametro
+  const handleClickCompany = (id: string) => {
+    console.log(id)
+    router.push(`/company/${id}`);
+  }
+
 
   //TODO error handling
 
@@ -48,7 +55,7 @@ export default function Home() {
       <Button onClick={handleClickAdd}>Add new company</Button>
       <ContainerCard>
         {data && data.companies && data.companies.map(company => (
-          <Card key={company.id}>
+          <Card key={company.id} onClick={() => handleClickCompany(company.id)}>
             <TextCard>{company.name}</TextCard>
           </Card>
         ))}
