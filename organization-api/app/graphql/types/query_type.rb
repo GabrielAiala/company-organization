@@ -15,5 +15,12 @@ module Types
     def company(id:)
       Company.find(id)
     end
+
+    field :employees, [EmployeeType], null: true, description: "Return a list of employees" do
+      argument :id, ID, required: true
+    end
+    def employees(id:)
+      Employee.where(company_id: id)
+    end
   end
 end
