@@ -1,10 +1,9 @@
 'use client'
 
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 
-import { gql } from "../../../__generated__/gql";
 import {
   Header,
   MainBody,
@@ -16,6 +15,8 @@ import {
   RowCard,
   DeleteButton,
 } from "../../styles";
+import ModalDelete from "@/baseComponents/modal-delete";
+import { gql } from "../../../__generated__/gql";
 
 const GET_EMPLOYEES = gql(`
   query Employees($id: ID!) {
@@ -48,8 +49,10 @@ interface props {
 
 //TODO colocar icones
 export default function Home({ params: { id } }: props) {
-  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
 
+  const router = useRouter();
 
   //TODO apagar do cache
   const { loading, error, data } = useQuery(GET_EMPLOYEES, { variables: { id: id } });
@@ -61,12 +64,24 @@ export default function Home({ params: { id } }: props) {
     router.push(`/company/${id}/new-employee`)
   }
 
-  const handleClickDelete = (employeeId: string) => {
+  const handleClickOpenModal = (employeeId: string) => {
+    setIsOpen(true);
+    setSelectedEmployeeId(employeeId);
+  }
+
+  const handleClickDelete = () => {
     deleteEmployee({
       variables: {
-        id: employeeId,
+        id: selectedEmployeeId,
       }
-    })
+    });
+    //TODO feedback
+    handleCloseModal();
+  }
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+    setSelectedEmployeeId('');
   }
 
 
@@ -77,6 +92,12 @@ export default function Home({ params: { id } }: props) {
 
   return (
     <MainBody>
+      <ModalDelete
+        message="Are you sure you want delete this employee?"
+        onClickDelete={handleClickDelete}
+        onClickcancel={handleCloseModal}
+        show={isOpen}
+      />
       <Header>
         <Title>{data?.company?.name}</Title>
       </Header>
@@ -88,7 +109,7 @@ export default function Home({ params: { id } }: props) {
             <Card>
               <TextCard>{employee.name}</TextCard>
             </Card>
-            <DeleteButton onClick={() => handleClickDelete(employee.id)}>delete</DeleteButton>
+            <DeleteButton onClick={() => handleClickOpenModal(employee.id)}>delete</DeleteButton>
           </RowCard>
         ))}
 
