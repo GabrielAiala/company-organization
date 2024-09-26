@@ -1,8 +1,21 @@
 'use client'
-import React, { FormEvent } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useState,
+} from "react";
 
 
-import { Button, MainBody, Title } from "@/app/styles";
+import {
+  Button,
+  InputFile,
+  MainBody,
+  Title,
+  LabelInput,
+  Column,
+} from "@/app/styles";
+import { useRouter } from "next/navigation";
+
 import { useMutation } from "@apollo/client";
 
 import { gql } from "@/__generated__";
@@ -27,7 +40,20 @@ interface props {
 
 export default function Home({ params: { id } }: props) {
   //TODO error and loading handling
-  const [saveCompany, { error, loading }] = useMutation(EMPLOYEE_CREATE);
+  const router = useRouter();
+  const [saveCompany] = useMutation(EMPLOYEE_CREATE);
+  const [picture, setPicture] = useState<string | ArrayBuffer | null | undefined>()
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = (event.target as HTMLInputElement).files
+    if (file && file[0]) {
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        setPicture(e.target?.result);
+      };
+      reader.readAsDataURL(file[0]);
+    }
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -39,9 +65,13 @@ export default function Home({ params: { id } }: props) {
       variables: {
         employee: {
           name: formData.get("name") as string,
+          email: formData.get("email") as string,
+          picture: picture as string,
           companyId: parseInt(id, 10),
         },
       },
+    }).then(()=> {
+      router.push(`/company/${id}`);
     });
   }
 
@@ -49,8 +79,24 @@ export default function Home({ params: { id } }: props) {
     <MainBody>
       <Title>New Employee</Title>
       <form onSubmit={onSubmit}>
-        <Input name="name" />
-        <Button type="submit">Create</Button>
+        <Column>
+
+          <LabelInput>Profile Picture:</LabelInput>
+          <InputFile
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+          
+          <LabelInput>Name:</LabelInput>
+          <Input name="name" />
+
+          <LabelInput>Email:</LabelInput>
+          <Input name="email" />
+          
+          <Button type="submit">Create</Button>
+
+        </Column>
       </form>
     </MainBody>
   );

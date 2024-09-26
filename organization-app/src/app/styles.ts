@@ -2,11 +2,18 @@ import styled from 'styled-components';
 
 //TODO reorganize components
 
-const MainBody = styled.div`
-  width: 100%;
+const Row = styled.div`
   display: flex;
-  padding: ${props => `${props.theme.spacing.m} ${props.theme.spacing.xxl}`};
+  flex-direction: row;
+`;
+
+const Column = styled.div`
+  display: flex;
   flex-direction: column;
+`
+const MainBody = styled(Column)`
+  width: 100%;
+  padding: ${props => `${props.theme.spacing.m} ${props.theme.spacing.xxl}`};
   gap: ${props => props.theme.spacing.sm};
 `;
 
@@ -25,7 +32,6 @@ const Card = styled.div`
   padding: ${props => props.theme.spacing.m};
   border-radius: 15px;
   cursor: pointer;
-  
   flex: 6;
 
   &:hover {
@@ -38,23 +44,18 @@ const Card = styled.div`
 `;
 
 
-const RowCard = styled.div`
-  display: flex;
-  flex-direction: row;
+const RowCard = styled(Row)`
   gap: ${props => props.theme.spacing.sm};
 `
 const DeleteButton = styled.button`
   background: ${props => props.theme.colors.error["60"]};
   color: ${props => props.theme.colors.error["100"]};
-
   border-radius: 10px;
   border: none;
   padding: ${props => props.theme.spacing.m};
 `
 
-const ContainerCard = styled.div`
-  display: flex;
-  flex-direction: column;
+const ContainerCard = styled(Column)`
   gap: ${props => props.theme.spacing.xs};
 `;
 
@@ -70,6 +71,18 @@ const Button = styled.button`
   padding: ${props => props.theme.spacing.sm};
 `;
 
+const InputFile = styled.input`
+`;
+
+const LabelInput = styled.p``;
+
+const ProfilePic = styled.img``;
+
+const CardRow = styled(Row)`
+  gap: ${props => props.theme.spacing.sm};
+`;
+
+
 export {
   MainBody,
   Header,
@@ -80,4 +93,10 @@ export {
   ContainerCard,
   TextCard,
   Button,
+  InputFile,
+  LabelInput,
+  Row,
+  Column,
+  ProfilePic,
+  CardRow,
 }

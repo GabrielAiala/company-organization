@@ -14,6 +14,9 @@ import {
   Button,
   RowCard,
   DeleteButton,
+  Row,
+  Column,
+  ProfilePic,
 } from "../../styles";
 import ModalDelete from "@/baseComponents/modal-delete";
 import { gql } from "../../../__generated__/gql";
@@ -23,6 +26,8 @@ const GET_EMPLOYEES = gql(`
     employees(id: $id) {
       id
       name
+      picture
+      email
     }
     company(id: $id) {
       id
@@ -107,7 +112,15 @@ export default function Home({ params: { id } }: props) {
         {data?.employees?.map(employee => (
           <RowCard key={employee.id}>
             <Card>
-              <TextCard>{employee.name}</TextCard>
+              <Row>
+                {employee.picture && (
+                  <ProfilePic src={employee.picture} />
+                )}
+                <Column>
+                  <TextCard>{employee.name}</TextCard>
+                  <TextCard>{employee.email}</TextCard>
+                </Column>
+              </Row>
             </Card>
             <DeleteButton onClick={() => handleClickOpenModal(employee.id)}>delete</DeleteButton>
           </RowCard>
