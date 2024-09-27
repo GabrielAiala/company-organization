@@ -22,5 +22,25 @@ module Types
     def employees(id:)
       Employee.where(company_id: id)
     end
+
+    field :employee, EmployeeType, null: true, description: "Return an employee" do
+      argument :id, ID, required: true
+    end
+    def employee(id:)
+      Employee.find(id)
+    end
+
+    field :availableManagers, [EmployeeType], description: "Return a list of possible managers" do
+      argument :id, ID, required:true
+    end
+    def availableManagers(id:)
+      employee = Employee.find(id)
+      subordinates_ids = Employee.where(manager_id: id).select("id")
+
+      Employee.where(company_id: employee.company_id) # company employees
+              .where.not(id: id) # dont show the employee
+              .where.not(id: employee.manager_id) # dont show his manager
+              .where.not(id: subordinates_ids)# dont show his subordinates
+    end
   end
 end
