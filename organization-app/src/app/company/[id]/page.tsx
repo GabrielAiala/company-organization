@@ -14,24 +14,24 @@ import {
   Button,
   RowCard,
   DeleteButton,
-  Row,
   Column,
   ProfilePic,
+  CardRow,
 } from "../../styles";
 import ModalDelete from "@/baseComponents/modal-delete";
 import { gql } from "../../../__generated__/gql";
 
 const GET_EMPLOYEES = gql(`
-  query Employees($id: ID!) {
-    employees(id: $id) {
-      id
-      name
-      picture
-      email
-    }
+  query Company($id: ID!) {
     company(id: $id) {
       id
       name
+      employees {
+        id
+        name
+        email
+        picture
+      }
     }
   }
 `);
@@ -84,6 +84,10 @@ export default function Home({ params: { id } }: props) {
     handleCloseModal();
   }
 
+  const handleClickEmployee = (employeeId: string) => {
+    router.push(`/company/${id}/${employeeId}`);
+  }
+
   const handleCloseModal = () => {
     setIsOpen(false);
     setSelectedEmployeeId('');
@@ -109,10 +113,10 @@ export default function Home({ params: { id } }: props) {
       <Button onClick={handleClickAdd}>Add new employee</Button>
       <ContainerCard>
 
-        {data?.employees?.map(employee => (
+        {data?.company?.employees?.map(employee => (
           <RowCard key={employee.id}>
-            <Card>
-              <Row>
+            <Card onClick={() => handleClickEmployee(employee.id)}>
+              <CardRow>
                 {employee.picture && (
                   <ProfilePic src={employee.picture} />
                 )}
@@ -120,7 +124,7 @@ export default function Home({ params: { id } }: props) {
                   <TextCard>{employee.name}</TextCard>
                   <TextCard>{employee.email}</TextCard>
                 </Column>
-              </Row>
+              </CardRow>
             </Card>
             <DeleteButton onClick={() => handleClickOpenModal(employee.id)}>delete</DeleteButton>
           </RowCard>

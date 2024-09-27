@@ -32,7 +32,7 @@ const Card = styled.div`
   padding: ${props => props.theme.spacing.m};
   border-radius: 15px;
   cursor: pointer;
-  flex: 6;
+  flex: 8;
 
   &:hover {
     background-color: ${props => props.theme.colors.secondary["95"]};
@@ -53,6 +53,7 @@ const DeleteButton = styled.button`
   border-radius: 10px;
   border: none;
   padding: ${props => props.theme.spacing.m};
+  flex: 1;
 `
 
 const ContainerCard = styled(Column)`
@@ -76,7 +77,9 @@ const InputFile = styled.input`
 
 const LabelInput = styled.p``;
 
-const ProfilePic = styled.img``;
+const ProfilePic = styled.img`
+  border-radius: 10px;
+`;
 
 const CardRow = styled(Row)`
   gap: ${props => props.theme.spacing.sm};
