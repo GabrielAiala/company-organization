@@ -8,18 +8,14 @@ import {
   Header,
   MainBody,
   Title,
-  Card,
   ContainerCard,
-  TextCard,
   Button,
   RowCard,
   DeleteButton,
-  Column,
-  ProfilePic,
-  CardRow,
 } from "../../styles";
 import ModalDelete from "@/baseComponents/modal-delete";
 import { gql } from "../../../__generated__/gql";
+import EmployeesCard from "@/baseComponents/employee-card";
 
 const GET_EMPLOYEES = gql(`
   query Company($id: ID!) {
@@ -64,7 +60,6 @@ export default function Home({ params: { id } }: props) {
   const [deleteEmployee] = useMutation(EMPLOYEE_DELETE);
 
 
-
   const handleClickAdd = () => {
     router.push(`/company/${id}/new-employee`)
   }
@@ -85,7 +80,7 @@ export default function Home({ params: { id } }: props) {
   }
 
   const handleClickEmployee = (employeeId: string) => {
-    router.push(`/company/${id}/${employeeId}`);
+    router.push(`/employee/${employeeId}`);
   }
 
   const handleCloseModal = () => {
@@ -96,8 +91,6 @@ export default function Home({ params: { id } }: props) {
 
   if (loading) return <p>Loading...</p>;
   // if (error) return <p>Error: {error.message}</p>;
-
-  console.log(error)
 
   return (
     <MainBody>
@@ -115,17 +108,11 @@ export default function Home({ params: { id } }: props) {
 
         {data?.company?.employees?.map(employee => (
           <RowCard key={employee.id}>
-            <Card onClick={() => handleClickEmployee(employee.id)}>
-              <CardRow>
-                {employee.picture && (
-                  <ProfilePic src={employee.picture} />
-                )}
-                <Column>
-                  <TextCard>{employee.name}</TextCard>
-                  <TextCard>{employee.email}</TextCard>
-                </Column>
-              </CardRow>
-            </Card>
+            <EmployeesCard 
+              key={employee.id}
+              employee={employee}
+              onClick={(id) => handleClickEmployee(id)}
+            />
             <DeleteButton onClick={() => handleClickOpenModal(employee.id)}>delete</DeleteButton>
           </RowCard>
         ))}

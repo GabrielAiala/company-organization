@@ -9,11 +9,11 @@ import {
   Header,
   MainBody,
   Title,
-  Card,
   ContainerCard,
-  TextCard,
   Button,
 } from "./styles";
+import { TextCard } from "@/baseComponents/employee-card/styles";
+import { Card } from "@/baseComponents/css-components/styles";
 
 const GET_COMPANIES = gql(`
   query Companies {
@@ -55,7 +55,7 @@ export default function Home() {
       <Button onClick={handleClickAdd}>Add new company</Button>
       <ContainerCard>
         {data && data.companies && data.companies.map(company => (
-          <Card key={company.id} onClick={() => handleClickCompany(company.id)}>
+          <Card clickable key={company.id} onClick={() => handleClickCompany(company.id)}>
             <TextCard>{company.name}</TextCard>
           </Card>
         ))}
