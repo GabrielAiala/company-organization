@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from "react";
+import _ from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 
@@ -16,8 +17,9 @@ import {
 import ModalDelete from "@/baseComponents/modal-delete";
 import { gql } from "../../../__generated__/gql";
 import EmployeesCard from "@/baseComponents/employee-card";
+import { Employee } from "@/__generated__/graphql";
 
-const GET_EMPLOYEES = gql(`
+export const GET_EMPLOYEES = gql(`
   query Company($id: ID!) {
     company(id: $id) {
       id
@@ -56,8 +58,29 @@ export default function Home({ params: { id } }: props) {
   const router = useRouter();
 
   //TODO apagar do cache
-  const { loading, error, data } = useQuery(GET_EMPLOYEES, { variables: { id: id } });
-  const [deleteEmployee] = useMutation(EMPLOYEE_DELETE);
+  const { loading, data } = useQuery(GET_EMPLOYEES, { variables: { id: id } });
+  const [employeeDelete] = useMutation(EMPLOYEE_DELETE, {
+    update(cache, { data }){
+      const queryCache = cache.readQuery({
+        query: GET_EMPLOYEES,
+        variables: { id }
+      })
+
+      const employeeBeforeDelete = _.cloneDeep(queryCache?.company?.employees)
+      const currentEmployees=_.remove(employeeBeforeDelete, (item) => console.log(item.id === data?.employeeDelete?.employee.id))
+
+      cache.writeQuery({
+        query: GET_EMPLOYEES,
+        data: {
+          company: {
+            id: id,
+            name: queryCache?.company?.name,
+            employees: currentEmployees,
+          }
+        }
+      });
+    }
+  });
 
 
   const handleClickAdd = () => {
@@ -70,7 +93,7 @@ export default function Home({ params: { id } }: props) {
   }
 
   const handleClickDelete = () => {
-    deleteEmployee({
+    employeeDelete({
       variables: {
         id: selectedEmployeeId,
       }
@@ -108,7 +131,7 @@ export default function Home({ params: { id } }: props) {
 
         {data?.company?.employees?.map(employee => (
           <RowCard key={employee.id}>
-            <EmployeesCard 
+            <EmployeesCard
               key={employee.id}
               employee={employee}
               onClick={(id) => handleClickEmployee(id)}

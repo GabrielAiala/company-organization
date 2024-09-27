@@ -20,6 +20,8 @@ import { useMutation } from "@apollo/client";
 
 import { gql } from "@/__generated__";
 import Input from "@/baseComponents/Input";
+import { GET_EMPLOYEES } from "../page";
+import _ from "lodash";
 
 const EMPLOYEE_CREATE = gql(`
   mutation EmployeeCreate($employee: EmployeeInput!) {
@@ -39,9 +41,29 @@ interface props {
 
 
 export default function Home({ params: { id } }: props) {
-  //TODO error and loading handling
   const router = useRouter();
-  const [saveCompany] = useMutation(EMPLOYEE_CREATE);
+  const [saveCompany] = useMutation(EMPLOYEE_CREATE, {
+    update(cache, { data }){
+      const queryCache = cache.readQuery({
+        query: GET_EMPLOYEES,
+        variables: { id }
+      })
+
+      const newEmployess = _.cloneDeep(queryCache?.company?.employees)
+      newEmployess?.push(data?.employeeCreate?.employee)
+
+      cache.writeQuery({
+        query: GET_EMPLOYEES,
+        data: {
+          company: {
+            id: id,
+            name: queryCache?.company?.name,
+            employees: newEmployess,
+          }
+        }
+      });
+    }
+  });
   const [picture, setPicture] = useState<string | ArrayBuffer | null | undefined>()
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {

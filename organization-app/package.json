@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "lodash": "^4.17.21",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
@@ -25,6 +26,7 @@
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.3.3",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@types/lodash": "^4.17.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

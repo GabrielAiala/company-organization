@@ -15,7 +15,7 @@ import {
 import { TextCard } from "@/baseComponents/employee-card/styles";
 import { Card } from "@/baseComponents/css-components/styles";
 
-const GET_COMPANIES = gql(`
+export const GET_COMPANIES = gql(`
   query Companies {
     companies {
       id
@@ -28,7 +28,7 @@ const GET_COMPANIES = gql(`
 export default function Home() {
   const router = useRouter();
 
-  const { loading, error, data } = useQuery(GET_COMPANIES);
+  const { loading, data } = useQuery(GET_COMPANIES);
 
 
   const handleClickAdd = () => {
@@ -41,21 +41,17 @@ export default function Home() {
     router.push(`/company/${id}`);
   }
 
-
-  //TODO error handling
-
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <MainBody>
       <Header>
-        <Title>Empresas</Title>
+        <Title>Companies</Title>
       </Header>
       <Button onClick={handleClickAdd}>Add new company</Button>
       <ContainerCard>
         {data && data.companies && data.companies.map(company => (
-          <Card clickable key={company.id} onClick={() => handleClickCompany(company.id)}>
+          <Card key={company.id} onClick={() => handleClickCompany(company.id)}>
             <TextCard>{company.name}</TextCard>
           </Card>
         ))}

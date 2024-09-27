@@ -7,6 +7,8 @@ import { useMutation } from "@apollo/client";
 
 import { gql } from "@/__generated__";
 import Input from "@/baseComponents/Input";
+import _ from "lodash";
+import { GET_COMPANIES } from "@/app/page";
 
 const COMPANY_CREATE = gql(`
   mutation CompanyCreate($company: CompanyInput!) {
@@ -23,7 +25,21 @@ const COMPANY_CREATE = gql(`
   ;
 export default function Home() {
   //TODO error and loading handling
-  const [saveCompany, { error, loading }] = useMutation(COMPANY_CREATE);
+  const [saveCompany, { error, loading }] = useMutation(COMPANY_CREATE,{
+    update(cache, { data }){
+      const queryCache = cache.readQuery({
+        query: GET_COMPANIES,
+      })
+
+      const newCompanies = _.cloneDeep(queryCache?.companies)
+      newCompanies?.push(data?.companyCreate?.company)
+
+      cache.writeQuery({
+        query: GET_COMPANIES,
+        data: {companies: newCompanies}
+      });
+    }
+  });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
